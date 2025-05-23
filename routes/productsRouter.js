@@ -27,21 +27,12 @@ productsRouter.get('/accessory-prices', async (req, res) => {
 // Sorted data - Bicycles
 
 productsRouter.get('/bikes/sorted', async (req, res) => {
-  const { direction } = req.query;
-  try {
-    let bikes;
+  const { by, direction } = req.query;
+  let bikes;
 
-    if (direction === 'asc') {
-      bikes = await getBikesByPriceAsc();
-    } else if (direction === 'desc') {
-      bikes = await getBikesByPriceDesc();
-    } else {
-      return res.status(400).json({ error: 'Invalid sort direction' });
-    }
+  if (by === 'price' && direction === 'asc') bikes = await getBikesByPriceAsc();
+  if (by === 'price' && direction === 'desc')
+    bikes = await getBikesByPriceDesc();
 
-    res.json(bikes);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Something went wrong' });
-  }
+  res.json(bikes);
 });
