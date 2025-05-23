@@ -24,15 +24,16 @@ productsRouter.get('/accessory-prices', async (req, res) => {
   res.json(accessoryPrices);
 });
 
-// Sorted data - Bicycles
+// Sorted data
 
-productsRouter.get('/bikes/sorted', async (req, res) => {
+productsRouter.get('/:category/sorted', async (req, res) => {
+  const { category } = req.params;
   const { by, direction } = req.query;
-  let bikes;
 
-  if (by === 'price' && direction === 'asc') bikes = await getBikesByPriceAsc();
-  if (by === 'price' && direction === 'desc')
-    bikes = await getBikesByPriceDesc();
+  if (category === 'bikes' && by === 'price') {
+    if (direction === 'asc') return res.json(await getBikesByPriceAsc());
+    if (direction === 'desc') return res.json(await getBikesByPriceDesc());
+  }
 
-  res.json(bikes);
+  res.status(400).json({ error: 'Invalid parameters' });
 });
