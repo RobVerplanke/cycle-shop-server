@@ -14,3 +14,15 @@ export async function getAllAccessoryPrices() {
   const { rows } = await pool.query('SELECT * FROM accessory_prices');
   return rows;
 }
+
+// Sorting data - Bicycles
+
+export async function getBikesByPriceAsc() {
+  const { rows } = await pool.query('SELECT * FROM bikes ORDER BY price ASC');
+  return rows;
+}
+
+export async function getBikesByPriceDesc() {
+  const { rows } = await pool.query('SELECT * FROM bikes ORDER BY price DESC');
+  return rows;
+}
