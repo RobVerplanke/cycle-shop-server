@@ -31,12 +31,15 @@ export async function getBikesByPriceDesc() {
 
 export async function getAccessoriesByPriceAsc() {
   const { rows } = await pool.query(
-    `SELECT DISTINCT ON (a.id)
-      a.*,
-      ap.price
+    `SELECT a.*, ap.*
       FROM accessories a
-      JOIN accessory_prices ap ON a.id = ap.accessory_id
-      ORDER BY a.id, ap.price ASC;
+      JOIN accessory_prices ap ON ap.accessory_id = a.id
+      JOIN (
+        SELECT accessory_id, MIN(price) AS min_price
+        FROM accessory_prices
+        GROUP BY accessory_id
+      ) sorted_prices ON sorted_prices.accessory_id = a.id
+      ORDER BY sorted_prices.min_price ASC;
     `
   );
   return rows;
@@ -44,12 +47,15 @@ export async function getAccessoriesByPriceAsc() {
 
 export async function getAccessoriesByPriceDesc() {
   const { rows } = await pool.query(
-    `SELECT DISTINCT ON (a.id)
-      a.*,
-      ap.price
+    `SELECT a.*, ap.*
       FROM accessories a
-      JOIN accessory_prices ap ON a.id = ap.accessory_id
-      ORDER BY a.id, ap.price DESC;
+      JOIN accessory_prices ap ON ap.accessory_id = a.id
+      JOIN (
+        SELECT accessory_id, MIN(price) AS min_price
+        FROM accessory_prices
+        GROUP BY accessory_id
+      ) sorted_prices ON sorted_prices.accessory_id = a.id
+      ORDER BY sorted_prices.min_price DESC;
     `
   );
   return rows;
