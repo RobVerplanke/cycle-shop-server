@@ -31,14 +31,20 @@ export async function getBikesByPriceDesc() {
 
 export async function getAccessoriesByPriceAsc() {
   const { rows } = await pool.query(
-    'SELECT * FROM accessories ORDER BY price ASC'
+    `SELECT a.*, ap.price
+    FROM accessories a
+    JOIN accessory_prices ap ON a.id = ap.accessory_id
+    ORDER BY ap.price ASC`
   );
   return rows;
 }
 
 export async function getAccessoriesByPriceDesc() {
   const { rows } = await pool.query(
-    'SELECT * FROM accessories ORDER BY price DESC'
+    `SELECT a.*, ap.price
+    FROM accessories a
+    JOIN accessory_prices ap ON a.id = ap.accessory_id
+    ORDER BY ap.price DESC`
   );
   return rows;
 }
