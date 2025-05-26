@@ -5,6 +5,8 @@ import {
   getAllAccessoryPrices,
   getBikesByPriceAsc,
   getBikesByPriceDesc,
+  getAccessoriesByPriceAsc,
+  getAccessoriesByPriceDesc,
 } from '../db/queries.js';
 
 export const productsRouter = Router();
@@ -33,6 +35,12 @@ productsRouter.get('/:category/sorted', async (req, res) => {
   if (category === 'bikes' && by === 'price') {
     if (direction === 'asc') return res.json(await getBikesByPriceAsc());
     if (direction === 'desc') return res.json(await getBikesByPriceDesc());
+  }
+
+  if (category === 'accessories' && by === 'price') {
+    if (direction === 'asc') return res.json(await getAccessoriesByPriceAsc());
+    if (direction === 'desc')
+      return res.json(await getAccessoriesByPriceDesc());
   }
 
   res.status(400).json({ error: 'Invalid parameters' });

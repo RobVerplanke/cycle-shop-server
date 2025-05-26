@@ -26,3 +26,19 @@ export async function getBikesByPriceDesc() {
   const { rows } = await pool.query('SELECT * FROM bikes ORDER BY price DESC');
   return rows;
 }
+
+// Sorting data - Accessories
+
+export async function getAccessoriesByPriceAsc() {
+  const { rows } = await pool.query(
+    'SELECT * FROM accessories ORDER BY price ASC'
+  );
+  return rows;
+}
+
+export async function getAccessoriesByPriceDesc() {
+  const { rows } = await pool.query(
+    'SELECT * FROM accessories ORDER BY price DESC'
+  );
+  return rows;
+}
