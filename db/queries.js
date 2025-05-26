@@ -31,20 +31,26 @@ export async function getBikesByPriceDesc() {
 
 export async function getAccessoriesByPriceAsc() {
   const { rows } = await pool.query(
-    `SELECT a.*, ap.price
-    FROM accessories a
-    JOIN accessory_prices ap ON a.id = ap.accessory_id
-    ORDER BY ap.price ASC`
+    `SELECT DISTINCT ON (a.id)
+      a.*,
+      ap.price
+      FROM accessories a
+      JOIN accessory_prices ap ON a.id = ap.accessory_id
+      ORDER BY a.id, ap.price ASC;
+    `
   );
   return rows;
 }
 
 export async function getAccessoriesByPriceDesc() {
   const { rows } = await pool.query(
-    `SELECT a.*, ap.price
-    FROM accessories a
-    JOIN accessory_prices ap ON a.id = ap.accessory_id
-    ORDER BY ap.price DESC`
+    `SELECT DISTINCT ON (a.id)
+      a.*,
+      ap.price
+      FROM accessories a
+      JOIN accessory_prices ap ON a.id = ap.accessory_id
+      ORDER BY a.id, ap.price DESC;
+    `
   );
   return rows;
 }
