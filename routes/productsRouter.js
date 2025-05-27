@@ -9,7 +9,7 @@ import {
   getAccessoriesByPriceDesc,
   getBikesByAddedDate,
   getAccessoriesByAddedDate,
-  getAccessoriesByPolularity,
+  getAccessoriesByPopularity,
 } from '../db/queries.js';
 
 export const productsRouter = Router();
