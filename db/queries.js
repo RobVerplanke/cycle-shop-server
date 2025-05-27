@@ -43,15 +43,16 @@ export async function getAccessoriesByPriceAsc() {
   a.added,
   json_agg(
     json_build_object(
+      'id', ap.id,
       'price', ap.price,
-      'size', ap.size,
-      'accessory_price_id', ap.id
+      'size', ap.size
     ) ORDER BY ap.price ASC
   ) AS prices
 FROM accessories a
 JOIN accessory_prices ap ON ap.accessory_id = a.id
-GROUP BY a.id
+GROUP BY a.id, a.name, a.description, a.image_url, a.type, a.category, a.introduction, a.sold, a.added
 ORDER BY MIN(ap.price) ASC;
+
     `
   );
   return rows;
@@ -71,15 +72,16 @@ export async function getAccessoriesByPriceDesc() {
   a.added,
   json_agg(
     json_build_object(
+      'id', ap.id,
       'price', ap.price,
-      'size', ap.size,
-      'accessory_price_id', ap.id
+      'size', ap.size
     ) ORDER BY ap.price ASC
   ) AS prices
 FROM accessories a
 JOIN accessory_prices ap ON ap.accessory_id = a.id
-GROUP BY a.id
+GROUP BY a.id, a.name, a.description, a.image_url, a.type, a.category, a.introduction, a.sold, a.added
 ORDER BY MIN(ap.price) DESC;
+
     `
   );
   return rows;
