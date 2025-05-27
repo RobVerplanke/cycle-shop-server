@@ -8,6 +8,7 @@ import {
   getAccessoriesByPriceAsc,
   getAccessoriesByPriceDesc,
   getBikesByAddedDate,
+  getBikesByPopularity,
   getAccessoriesByAddedDate,
   getAccessoriesByPopularity,
 } from '../db/queries.js';
