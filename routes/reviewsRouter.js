@@ -1,10 +1,13 @@
 import { Router } from 'express';
+import { getAllReviews } from '../db/queries.js';
+
 export const reviewsRouter = Router();
 
 const reviews = [];
 
 // GET
-reviewsRouter.get('/', (req, res) => {
+reviewsRouter.get('/', async (req, res) => {
+  const reviews = await getAllReviews();
   res.json(reviews);
 });
 
