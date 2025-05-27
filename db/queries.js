@@ -112,3 +112,9 @@ export async function getAccessoriesByAddedDate() {
   );
   return rows;
 }
+
+// Reviews
+export async function getAllReviews() {
+  const { rows } = await pool.query('SELECT * FROM reviews');
+  return rows;
+}
