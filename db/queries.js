@@ -47,15 +47,13 @@ export async function getAccessoriesByPriceAsc() {
 
 export async function getAccessoriesByPriceDesc() {
   const { rows } = await pool.query(
-    `SELECT a.*, ap.*
+    `SELECT 
+      a.*, 
+      json_agg(ap ORDER BY ap.price ASC) AS prices
       FROM accessories a
       JOIN accessory_prices ap ON ap.accessory_id = a.id
-      JOIN (
-        SELECT accessory_id, MIN(price) AS min_price
-        FROM accessory_prices
-        GROUP BY accessory_id
-      ) sorted_prices ON sorted_prices.accessory_id = a.id
-      ORDER BY sorted_prices.min_price DESC;
+      GROUP BY a.id
+      ORDER BY MIN(ap.price) ASC; 
     `
   );
   return rows;
