@@ -39,10 +39,12 @@ productsRouter.get('/:category/sorted', async (req, res) => {
     if (direction === 'asc') return res.json(await getBikesByPriceAsc());
     if (direction === 'desc') return res.json(await getBikesByPriceDesc());
   }
-  if (category === 'bikes' && by === 'added')
+  if (category === 'bikes' && by === 'added') {
     return res.json(await getBikesByAddedDate());
-  if (category === 'bikes' && by === 'popularity')
+  }
+  if (category === 'bikes' && by === 'popularity') {
     return res.json(await getBikesByPolularity());
+  }
 
   // Accessories
   if (category === 'accessories' && by === 'price') {
@@ -51,10 +53,12 @@ productsRouter.get('/:category/sorted', async (req, res) => {
       return res.json(await getAccessoriesByPriceDesc());
   }
 
-  if (category === 'accessories' && by === 'added')
+  if (category === 'accessories' && by === 'added') {
     return res.json(await getAccessoriesByAddedDate());
-  if (category === 'accessories' && by === 'popularity')
+  }
+  if (category === 'accessories' && by === 'popularity') {
     return res.json(await getAccessoriesByPolularity());
+  }
 
   // Catch error
   res.status(400).json({ error: 'Invalid parameters' });
