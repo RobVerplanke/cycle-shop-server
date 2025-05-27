@@ -15,8 +15,7 @@ export async function getAllAccessoryPrices() {
   return rows;
 }
 
-// Sorting data - Bicycles
-
+// Bicycles - Sort by price
 export async function getBikesByPriceAsc() {
   const { rows } = await pool.query('SELECT * FROM bikes ORDER BY price ASC');
   return rows;
@@ -27,8 +26,19 @@ export async function getBikesByPriceDesc() {
   return rows;
 }
 
-// Sorting data - Accessories
+// Bicycles - Sort by popularity
+export async function getBikesByPolularity() {
+  const { rows } = await pool.query('SELECT * FROM bikes ORDER BY sold DESC');
+  return rows;
+}
 
+// Bicycles - Sort by added date
+export async function getBikesByAddedDate() {
+  const { rows } = await pool.query('SELECT * FROM bikes ORDER BY added DESC');
+  return rows;
+}
+
+// Accessories - Sort by price
 export async function getAccessoriesByPriceAsc() {
   const { rows } = await pool.query(
     `SELECT 
@@ -83,6 +93,22 @@ GROUP BY a.id, a.name, a.description, a.image_url, a.type, a.category, a.introdu
 ORDER BY MIN(ap.price) DESC;
 
     `
+  );
+  return rows;
+}
+
+// Accessories - Sort by popularity
+export async function getAccessoriesByPolularity() {
+  const { rows } = await pool.query(
+    'SELECT * FROM accessories ORDER BY sold DESC'
+  );
+  return rows;
+}
+
+// Accessories - Sort by added date
+export async function getAccessoriesByAddedDate() {
+  const { rows } = await pool.query(
+    'SELECT * FROM accessories ORDER BY added DESC'
   );
   return rows;
 }
