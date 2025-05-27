@@ -43,7 +43,7 @@ productsRouter.get('/:category/sorted', async (req, res) => {
     return res.json(await getBikesByAddedDate());
   }
   if (category === 'bikes' && by === 'popularity') {
-    return res.json(await getBikesByPolularity());
+    return res.json(await getBikesByPopularity());
   }
 
   // Accessories
@@ -57,7 +57,7 @@ productsRouter.get('/:category/sorted', async (req, res) => {
     return res.json(await getAccessoriesByAddedDate());
   }
   if (category === 'accessories' && by === 'popularity') {
-    return res.json(await getAccessoriesByPolularity());
+    return res.json(await getAccessoriesByPopularity());
   }
 
   // Catch error

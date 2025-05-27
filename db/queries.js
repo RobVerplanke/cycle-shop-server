@@ -27,7 +27,7 @@ export async function getBikesByPriceDesc() {
 }
 
 // Bicycles - Sort by popularity
-export async function getBikesByPolularity() {
+export async function getBikesByPopularity() {
   const { rows } = await pool.query('SELECT * FROM bikes ORDER BY sold DESC');
   return rows;
 }
@@ -98,7 +98,7 @@ ORDER BY MIN(ap.price) DESC;
 }
 
 // Accessories - Sort by popularity
-export async function getAccessoriesByPolularity() {
+export async function getAccessoriesByPopularity() {
   const { rows } = await pool.query(
     'SELECT * FROM accessories ORDER BY sold DESC'
   );
