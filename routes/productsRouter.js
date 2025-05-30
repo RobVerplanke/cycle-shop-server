@@ -11,6 +11,8 @@ import {
   getBikesByPopularity,
   getAccessoriesByAddedDate,
   getAccessoriesByPopularity,
+  getBikesByRating,
+  getAccessoriesByRating,
 } from '../db/queries.js';
 
 export const productsRouter = Router();
@@ -46,6 +48,9 @@ productsRouter.get('/:category/sorted', async (req, res) => {
   if (category === 'bikes' && by === 'popularity') {
     return res.json(await getBikesByPopularity());
   }
+  if (category === 'bikes' && by === 'rating') {
+    return res.json(await getBikesByRating());
+  }
 
   // Accessories
   if (category === 'accessories' && by === 'price') {
@@ -59,6 +64,9 @@ productsRouter.get('/:category/sorted', async (req, res) => {
   }
   if (category === 'accessories' && by === 'popularity') {
     return res.json(await getAccessoriesByPopularity());
+  }
+  if (category === 'accessories' && by === 'rating') {
+    return res.json(await getAccessoriesByRating());
   }
 
   // Catch error

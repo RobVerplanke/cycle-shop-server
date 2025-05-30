@@ -38,32 +38,45 @@ export async function getBikesByAddedDate() {
   return rows;
 }
 
+// Bicycles - Sort by Rating
+export async function getBikesByRating() {
+  const { rows } = await pool.query(
+    `SELECT 
+      b.*, 
+      COALESCE(AVG(r.rating), 0) AS average_rating
+      FROM bikes b
+      LEFT JOIN reviews r 
+      ON r.item_id = b.id AND r.item_type = 'bikes'
+      GROUP BY b.id
+      ORDER BY average_rating DESC;`
+  );
+  return rows;
+}
+
 // Accessories - Sort by price
 export async function getAccessoriesByPriceAsc() {
   const { rows } = await pool.query(
     `SELECT 
-  a.id,
-  a.name,
-  a.description,
-  a.image_url,
-  a.type,
-  a.category,
-  a.introduction,
-  a.sold,
-  a.added,
-  json_agg(
-    json_build_object(
-      'id', ap.id,
-      'price', ap.price,
-      'size', ap.size
-    ) ORDER BY ap.price ASC
-  ) AS prices
-FROM accessories a
-JOIN accessory_prices ap ON ap.accessory_id = a.id
-GROUP BY a.id, a.name, a.description, a.image_url, a.type, a.category, a.introduction, a.sold, a.added
-ORDER BY MIN(ap.price) ASC;
-
-    `
+      a.id,
+      a.name,
+      a.description,
+      a.image_url,
+      a.type,
+      a.category,
+      a.introduction,
+      a.sold,
+      a.added,
+      json_agg(
+        json_build_object(
+          'id', ap.id,
+          'price', ap.price,
+          'size', ap.size
+        ) ORDER BY ap.price ASC
+      ) AS prices
+    FROM accessories a
+    JOIN accessory_prices ap ON ap.accessory_id = a.id
+    GROUP BY a.id, a.name, a.description, a.image_url, a.type, a.category, a.introduction, a.sold, a.added
+    ORDER BY MIN(ap.price) ASC;`
   );
   return rows;
 }
@@ -71,28 +84,26 @@ ORDER BY MIN(ap.price) ASC;
 export async function getAccessoriesByPriceDesc() {
   const { rows } = await pool.query(
     `SELECT 
-  a.id,
-  a.name,
-  a.description,
-  a.image_url,
-  a.type,
-  a.category,
-  a.introduction,
-  a.sold,
-  a.added,
-  json_agg(
-    json_build_object(
-      'id', ap.id,
-      'price', ap.price,
-      'size', ap.size
-    ) ORDER BY ap.price ASC
-  ) AS prices
-FROM accessories a
-JOIN accessory_prices ap ON ap.accessory_id = a.id
-GROUP BY a.id, a.name, a.description, a.image_url, a.type, a.category, a.introduction, a.sold, a.added
-ORDER BY MIN(ap.price) DESC;
-
-    `
+      a.id,
+      a.name,
+      a.description,
+      a.image_url,
+      a.type,
+      a.category,
+      a.introduction,
+      a.sold,
+      a.added,
+      json_agg(
+        json_build_object(
+          'id', ap.id,
+          'price', ap.price,
+          'size', ap.size
+        ) ORDER BY ap.price ASC
+      ) AS prices
+    FROM accessories a
+    JOIN accessory_prices ap ON ap.accessory_id = a.id
+    GROUP BY a.id, a.name, a.description, a.image_url, a.type, a.category, a.introduction, a.sold, a.added
+    ORDER BY MIN(ap.price) DESC;`
   );
   return rows;
 }
@@ -109,6 +120,21 @@ export async function getAccessoriesByPopularity() {
 export async function getAccessoriesByAddedDate() {
   const { rows } = await pool.query(
     'SELECT * FROM accessories ORDER BY added DESC'
+  );
+  return rows;
+}
+
+// Accessories - Sort by Rating
+export async function getAccessoriesByRating() {
+  const { rows } = await pool.query(
+    `SELECT 
+      a.*, 
+      COALESCE(AVG(r.rating), 0) AS average_rating
+    FROM accessories a
+    LEFT JOIN reviews r 
+      ON r.item_id = a.id AND r.item_type = 'accessories'
+    GROUP BY a.id
+    ORDER BY average_rating DESC;`
   );
   return rows;
 }
