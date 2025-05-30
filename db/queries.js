@@ -46,7 +46,7 @@ export async function getBikesByRating() {
       COALESCE(AVG(r.rating), 0) AS average_rating
       FROM bikes b
       LEFT JOIN reviews r 
-      ON r.item_id = b.id AND r.item_type = 'bikes'
+        ON r.item_id = b.id AND r.item_type = 'bike'
       GROUP BY b.id
       ORDER BY average_rating DESC;`
   );
@@ -128,13 +128,13 @@ export async function getAccessoriesByAddedDate() {
 export async function getAccessoriesByRating() {
   const { rows } = await pool.query(
     `SELECT 
-      a.*, 
+      b.*, 
       COALESCE(AVG(r.rating), 0) AS average_rating
-    FROM accessories a
-    LEFT JOIN reviews r 
-      ON r.item_id = a.id AND r.item_type = 'accessories'
-    GROUP BY a.id
-    ORDER BY average_rating DESC;`
+      FROM accessories b
+      LEFT JOIN reviews r 
+        ON r.item_id = b.id AND r.item_type = 'accessory'
+      GROUP BY b.id
+      ORDER BY average_rating DESC;`
   );
   return rows;
 }
