@@ -1,7 +1,6 @@
 import cors from 'cors';
 import express from 'express';
 import { productsRouter } from './routes/productsRouter.js';
-import { reviewsRouter } from './routes/reviewsRouter.js';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -9,12 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Get product data
+// Use corresponding router
 app.use('/products', productsRouter);
 
-// Get or post reviews
-app.use('/reviews', reviewsRouter);
-
+// Listen for requests
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}!`);
 });
