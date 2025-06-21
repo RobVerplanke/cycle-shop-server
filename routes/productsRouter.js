@@ -8,7 +8,7 @@ import {
 export const productsRouter = Router();
 
 // Valid argument values
-const validCategories = ['bikes', 'accessories'];
+const validCategories = ['bike', 'accessory'];
 const validSorts = ['default', 'price', 'popularity', 'added', 'rating'];
 const validDirections = ['asc', 'desc'];
 
@@ -52,10 +52,10 @@ productsRouter.get('/:category/sorted', async (req, res) => {
 
   // Get the requested data with validated arguments
   try {
-    if (category === 'bikes') {
+    if (category === 'bike') {
       return res.json(await getBikesSortedBy(by, direction));
     }
-    if (category === 'accessories') {
+    if (category === 'accessory') {
       return res.json(await getAccessoriesSortedBy(by, direction));
     }
   } catch (error) {
