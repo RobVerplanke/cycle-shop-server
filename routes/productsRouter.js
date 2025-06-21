@@ -9,7 +9,7 @@ productsRouter.get('/:category/sorted', async (req, res) => {
   const { by, direction = 'desc' } = req.query;
 
   const validCategories = ['bikes', 'accessories'];
-  const validSorts = ['price', 'popularity', 'added', 'rating'];
+  const validSorts = ['default', 'price', 'popularity', 'added', 'rating'];
   const validDirections = ['asc', 'desc'];
 
   // Validate arguments
