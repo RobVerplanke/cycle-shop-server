@@ -1,16 +1,37 @@
 import { Router } from 'express';
-import { getBikesSortedBy, getAccessoriesSortedBy } from '../db/queries.js';
+import {
+  getReviewsByProductId,
+  getBikesSortedBy,
+  getAccessoriesSortedBy,
+} from '../db/queries.js';
 
 export const productsRouter = Router();
+
+// Valid argument values
+const validCategories = ['bikes', 'accessories'];
+const validSorts = ['default', 'price', 'popularity', 'added', 'rating'];
+const validDirections = ['asc', 'desc'];
+
+productsRouter.get('/:category/:id/reviews', async (req, res) => {
+  const { category, id } = req.params;
+
+  if (!validCategories.includes(category)) {
+    return res.status(400).json({ error: 'Invalid category' });
+  }
+
+  try {
+    const reviews = await getReviewsByProductId(category, id);
+    return res.json(reviews);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Sorted data
 productsRouter.get('/:category/sorted', async (req, res) => {
   const { category } = req.params;
   const { by, direction = 'desc' } = req.query;
-
-  const validCategories = ['bikes', 'accessories'];
-  const validSorts = ['default', 'price', 'popularity', 'added', 'rating'];
-  const validDirections = ['asc', 'desc'];
 
   // Validate arguments
   if (!validCategories.includes(category)) {

@@ -2,11 +2,15 @@ import pool from './db.js';
 
 // Dynamic queries that return a list of products in the given order
 
+// Bicycles
 export async function getBikesSortedBy(sortBy, direction) {
   let orderBy = '';
   let selectRating = '';
   let joinReviews = '';
   let groupBy = 'GROUP BY b.id';
+
+  selectRating = ', COALESCE(AVG(r.rating), 0) AS avg_rating';
+  joinReviews = `LEFT JOIN reviews r ON r.item_id = b.id AND r.item_type = 'bike'`;
 
   if (sortBy === 'price') {
     const safeDirection = direction === 'desc' ? 'DESC' : 'ASC';
@@ -20,9 +24,7 @@ export async function getBikesSortedBy(sortBy, direction) {
     orderBy = 'ORDER BY b.added DESC';
   } else if (sortBy === 'rating') {
     // Sort by highest rating
-    selectRating = ', COALESCE(AVG(r.rating), 0) AS average_rating';
-    joinReviews = `LEFT JOIN reviews r ON r.item_id = b.id AND r.item_type = 'bike'`;
-    orderBy = 'ORDER BY average_rating DESC';
+    orderBy = 'ORDER BY avg_rating DESC';
   } else {
     // Default sortingoption
     orderBy = 'ORDER BY b.added DESC';
@@ -41,6 +43,7 @@ export async function getBikesSortedBy(sortBy, direction) {
   return rows;
 }
 
+// Accessories
 export async function getAccessoriesSortedBy(sortBy, direction) {
   let orderBy = '';
   let safeDirection = direction === 'desc' ? 'DESC' : 'ASC';
@@ -87,6 +90,31 @@ export async function getAccessoriesSortedBy(sortBy, direction) {
     GROUP BY a.id
     ${orderBy};
   `);
+
+  return rows;
+}
+
+// Reviews
+export async function getReviewsByProductId(category, productId) {
+  if (!category || !productId) {
+    throw new Error('Missing category or productId');
+  }
+
+  const { rows } = await pool.query(
+    `
+    SELECT
+      r.id,
+      r.rating,
+      r.review,
+      r.name,
+      r.email
+    FROM reviews r
+    WHERE r.item_id = $1 AND r.item_type = $2
+    ORDER BY r.created_at DESC
+    LIMIT 50;
+  `,
+    [productId, category]
+  );
 
   return rows;
 }
