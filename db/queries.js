@@ -110,7 +110,7 @@ export async function getReviewsByProductId(category, productId) {
       r.email
     FROM reviews r
     WHERE r.item_id = $1 AND r.item_type = $2
-    ORDER BY r.created_at DESC
+    ORDER BY r.added DESC
     LIMIT 50;
   `,
     [productId, category]
