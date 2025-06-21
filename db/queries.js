@@ -90,9 +90,3 @@ export async function getAccessoriesSortedBy(sortBy, direction) {
 
   return rows;
 }
-
-// Reviews
-// export async function getAllReviews() {
-//   const { rows } = await pool.query('SELECT * FROM reviews');
-//   return rows;
-// }
