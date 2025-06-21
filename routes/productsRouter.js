@@ -1,74 +1,47 @@
 import { Router } from 'express';
-import {
-  getAllBikes,
-  getAllAccessories,
-  getAllAccessoryPrices,
-  getBikesByPriceAsc,
-  getBikesByPriceDesc,
-  getAccessoriesByPriceAsc,
-  getAccessoriesByPriceDesc,
-  getBikesByAddedDate,
-  getBikesByPopularity,
-  getAccessoriesByAddedDate,
-  getAccessoriesByPopularity,
-  getBikesByRating,
-  getAccessoriesByRating,
-} from '../db/queries.js';
+import { getBikesSortedBy, getAccessoriesSortedBy } from '../db/queries.js';
 
 export const productsRouter = Router();
-
-productsRouter.get('/bikes', async (req, res) => {
-  const bikes = await getAllBikes();
-  res.json(bikes);
-});
-
-productsRouter.get('/accessories', async (req, res) => {
-  const accessories = await getAllAccessories();
-  res.json(accessories);
-});
-
-productsRouter.get('/accessory-prices', async (req, res) => {
-  const accessoryPrices = await getAllAccessoryPrices();
-  res.json(accessoryPrices);
-});
 
 // Sorted data
 productsRouter.get('/:category/sorted', async (req, res) => {
   const { category } = req.params;
-  const { by, direction } = req.query;
+  const { by, direction = 'desc' } = req.query;
 
-  // Bikes
-  if (category === 'bikes' && by === 'price') {
-    if (direction === 'asc') return res.json(await getBikesByPriceAsc());
-    if (direction === 'desc') return res.json(await getBikesByPriceDesc());
-  }
-  if (category === 'bikes' && by === 'added') {
-    return res.json(await getBikesByAddedDate());
-  }
-  if (category === 'bikes' && by === 'popularity') {
-    return res.json(await getBikesByPopularity());
-  }
-  if (category === 'bikes' && by === 'rating') {
-    return res.json(await getBikesByRating());
+  const validCategories = ['bikes', 'accessories'];
+  const validSorts = ['price', 'popularity', 'added', 'rating'];
+  const validDirections = ['asc', 'desc'];
+
+  // Validate arguments
+  if (!validCategories.includes(category)) {
+    return res.status(400).json({ error: 'Invalid category' });
   }
 
-  // Accessories
-  if (category === 'accessories' && by === 'price') {
-    if (direction === 'asc') return res.json(await getAccessoriesByPriceAsc());
-    if (direction === 'desc')
-      return res.json(await getAccessoriesByPriceDesc());
+  if (!by) {
+    return res.status(400).json({ error: 'Missing sort option (by)' });
   }
 
-  if (category === 'accessories' && by === 'added') {
-    return res.json(await getAccessoriesByAddedDate());
-  }
-  if (category === 'accessories' && by === 'popularity') {
-    return res.json(await getAccessoriesByPopularity());
-  }
-  if (category === 'accessories' && by === 'rating') {
-    return res.json(await getAccessoriesByRating());
+  if (!validSorts.includes(by)) {
+    return res.status(400).json({ error: 'Invalid sort option' });
   }
 
-  // Catch error
-  res.status(400).json({ error: 'Invalid parameters' });
+  if (by === 'price' && direction && !validDirections.includes(direction)) {
+    return res.status(400).json({ error: 'Invalid direction' });
+  }
+
+  // Get the requested data with validated arguments
+  try {
+    if (category === 'bikes') {
+      return res.json(await getBikesSortedBy(by, direction));
+    }
+    if (category === 'accessories') {
+      return res.json(await getAccessoriesSortedBy(by, direction));
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+
+  // Unhandled category
+  return res.status(400).json({ error: 'Unhandled category' });
 });
