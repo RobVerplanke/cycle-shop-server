@@ -40,7 +40,10 @@ export async function getBikesSortedBy(sortBy, direction) {
     ${orderBy};
   `);
 
-  return rows;
+  return rows.map((row) => ({
+    ...row,
+    price: parseFloat(row.price),
+  }));
 }
 
 // Accessories
@@ -91,7 +94,13 @@ export async function getAccessoriesSortedBy(sortBy, direction) {
     ${orderBy};
   `);
 
-  return rows;
+  return rows.map((row) => ({
+    ...row,
+    prices: row.prices.map((p) => ({
+      ...p,
+      price: parseFloat(p.price),
+    })),
+  }));
 }
 
 // Reviews
