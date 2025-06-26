@@ -32,8 +32,16 @@ productsRouter.get('/:category/:id/reviews', async (req, res) => {
 productsRouter.get('/:category/sorted', async (req, res) => {
   const { category } = req.params;
   const { by, direction = 'desc' } = req.query;
+  const rawSearch =
+    typeof req.query.search === 'string' ? req.query.search.trim() : undefined;
+  const search = rawSearch && rawSearch.length > 0 ? rawSearch : undefined;
 
-  // Validate arguments
+  if (search && search.length < 2) {
+    return res
+      .status(400)
+      .json({ error: 'Search term too short (minimum 2 characters)' });
+  }
+
   if (!validCategories.includes(category)) {
     return res.status(400).json({ error: 'Invalid category' });
   }
@@ -50,19 +58,17 @@ productsRouter.get('/:category/sorted', async (req, res) => {
     return res.status(400).json({ error: 'Invalid direction' });
   }
 
-  // Get the requested data with validated arguments
   try {
     if (category === 'bike') {
-      return res.json(await getBikesSortedBy(by, direction));
+      return res.json(await getBikesSortedBy(by, direction, search));
     }
     if (category === 'accessory') {
-      return res.json(await getAccessoriesSortedBy(by, direction));
+      return res.json(await getAccessoriesSortedBy(by, direction, search));
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 
-  // Unhandled category
   return res.status(400).json({ error: 'Unhandled category' });
 });
