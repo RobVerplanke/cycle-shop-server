@@ -24,10 +24,8 @@ export async function getBikesSortedBy(sortBy, direction, search) {
 
   const safeDirection = direction === 'asc' ? 'ASC' : 'DESC';
 
-  if (sortBy === 'lowToHigh') {
-    orderBy = `ORDER BY MIN(ap.price) ASC`;
-  } else if (sortBy === 'highToLow') {
-    orderBy = `ORDER BY MIN(ap.price) DESC`;
+  if (sortBy === 'price') {
+    orderBy = `ORDER BY MIN(ap.price) ${safeDirection}`;
   } else if (sortBy === 'popularity') {
     orderBy = `ORDER BY a.sold ${safeDirection}`;
   } else if (sortBy === 'added') {
@@ -75,10 +73,8 @@ export async function getAccessoriesSortedBy(sortBy, direction, search) {
     `;
   }
 
-  if (sortBy === 'lowToHigh') {
-    orderBy = `ORDER BY MIN(ap.price) ASC`;
-  } else if (sortBy === 'highToLow') {
-    orderBy = `ORDER BY MIN(ap.price) DESC`;
+  if (sortBy === 'price') {
+    orderBy = `ORDER BY MIN(ap.price) ${safeDirection}`;
   } else if (sortBy === 'popularity') {
     orderBy = `ORDER BY a.sold ${safeDirection}`;
   } else if (sortBy === 'added') {
