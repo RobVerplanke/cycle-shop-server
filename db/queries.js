@@ -25,15 +25,15 @@ export async function getBikesSortedBy(sortBy, direction, search) {
   const safeDirection = direction === 'asc' ? 'ASC' : 'DESC';
 
   if (sortBy === 'price') {
-    orderBy = `ORDER BY MIN(ap.price) ${safeDirection}`;
+    orderBy = `ORDER BY b.price ${safeDirection}`;
   } else if (sortBy === 'popularity') {
-    orderBy = `ORDER BY a.sold ${safeDirection}`;
+    orderBy = 'ORDER BY b.sold DESC';
   } else if (sortBy === 'added') {
-    orderBy = `ORDER BY a.added ${safeDirection}`;
+    orderBy = 'ORDER BY b.added DESC';
   } else if (sortBy === 'rating') {
-    orderBy = `ORDER BY avg_rating ${safeDirection}`;
+    orderBy = 'ORDER BY avg_rating DESC';
   } else {
-    orderBy = `ORDER BY a.added ${safeDirection}`;
+    orderBy = 'ORDER BY b.added DESC';
   }
 
   const query = `
@@ -76,13 +76,13 @@ export async function getAccessoriesSortedBy(sortBy, direction, search) {
   if (sortBy === 'price') {
     orderBy = `ORDER BY MIN(ap.price) ${safeDirection}`;
   } else if (sortBy === 'popularity') {
-    orderBy = `ORDER BY a.sold ${safeDirection}`;
+    orderBy = 'ORDER BY a.sold DESC';
   } else if (sortBy === 'added') {
-    orderBy = `ORDER BY a.added ${safeDirection}`;
+    orderBy = 'ORDER BY a.added DESC';
   } else if (sortBy === 'rating') {
-    orderBy = `ORDER BY avg_rating ${safeDirection}`;
+    orderBy = 'ORDER BY avg_rating DESC';
   } else {
-    orderBy = `ORDER BY a.added ${safeDirection}`;
+    orderBy = 'ORDER BY a.added DESC';
   }
 
   const query = `
