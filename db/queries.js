@@ -123,7 +123,7 @@ export async function getAccessoriesSortedBy(sortBy, direction, search) {
   }));
 }
 
-// Reviews
+// Get existing reviews
 export async function getReviewsByProductId(category, productId) {
   if (!category || !productId) {
     throw new Error('Missing category or productId');
@@ -147,3 +147,28 @@ export async function getReviewsByProductId(category, productId) {
 
   return rows;
 }
+
+// Post new review
+export const createReview = async (req, res) => {
+  const { item_id, item_type, name, email, review, rating } = req.body;
+
+  if (!item_id || !name || !email || !review || !rating) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO reviews (item_id, item_type, name, email, review, rating)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [item_id, item_type, name, email, review, rating]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating review:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// productById (id, category)
