@@ -133,6 +133,8 @@ export async function getReviewsByProductId(category, productId) {
     `
     SELECT
       r.id,
+      r.item_type,
+      r.item_id,
       r.rating,
       r.review,
       r.name,
@@ -149,10 +151,10 @@ export async function getReviewsByProductId(category, productId) {
 }
 
 // Post new review
-export const createReview = async (req, res) => {
+export async function createReview(req, res) {
   const { item_id, item_type, name, email, review, rating } = req.body;
 
-  if (!item_id || !name || !email || !review || !rating) {
+  if (!item_id || item_type || !name || !email || !review || !rating) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -169,6 +171,6 @@ export const createReview = async (req, res) => {
     console.error('Error creating review:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
-};
+}
 
 // productById (id, category)
