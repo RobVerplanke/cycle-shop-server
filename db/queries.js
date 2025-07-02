@@ -138,7 +138,8 @@ export async function getReviewsByProductId(category, productId) {
       r.rating,
       r.review,
       r.name,
-      r.email
+      r.email,
+      r.added
     FROM reviews r
     WHERE r.item_id = $1 AND r.item_type = $2
     ORDER BY r.added DESC
