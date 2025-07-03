@@ -155,7 +155,7 @@ export async function getReviewsByProductId(category, productId) {
 export async function createReview(req, res) {
   const { item_id, item_type, name, email, review, rating } = req.body;
 
-  if (!item_id || item_type || !name || !email || !review || !rating) {
+  if (!item_id || !item_type || !name || !email || !review || !rating) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
