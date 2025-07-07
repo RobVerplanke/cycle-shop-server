@@ -159,6 +159,10 @@ export async function createReview(req, res) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  if (typeof review !== 'string' || review.length > 500) {
+    return res.status(400).json({ error: 'Invalid review' });
+  }
+
   try {
     const result = await pool.query(
       `INSERT INTO reviews (item_id, item_type, name, email, review, rating)
@@ -173,5 +177,3 @@ export async function createReview(req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
-// productById (id, category)
